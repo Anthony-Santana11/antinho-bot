@@ -58,21 +58,26 @@ mvn exec:java
 No Discord, mencione o bot:
 
 @antinho o que é um record no Java?
+
 🛠️ Melhorias futuras
  Comandos slash (/chat)
  Memória de contexto por usuário
  Resposta em streaming (digitando)
  Deploy em VPS
  Dashboard web
+
 ⚠️ Observações
 O Discord limita mensagens em 2000 caracteres, então o bot divide respostas automaticamente
 Nunca suba suas API Keys para o GitHub
+crie o seu application.properties
+
 🔐 Segurança
 
 Adicione ao .gitignore:
 
 .env
 application.properties
+
 📄 Licença
 
 Este projeto é open-source e pode ser utilizado para fins de estudo e desenvolvimento.
