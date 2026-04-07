@@ -1,0 +1,1592 @@
+# 🧠 PLANO DE ULTRALEARNING JAVA NÍVEL SÊNIOR
+### Baseado nos 9 Pilares de Scott Young | 40h/semana | ~52 semanas
+
+---
+
+## PARTE 1 — VISÃO GERAL ESTRATÉGICA (Meta-aprendizagem)
+
+### Mapa Mental do Ecossistema Java
+
+```
+JAVA SÊNIOR
+│
+├── LOW-LEVEL
+│   ├── JVM Internals (ClassLoader, JIT, GC, JMM)
+│   ├── Bytecode & Reflection
+│   └── Concorrência profunda (JMM, happens-before)
+│
+├── LINGUAGEM MODERNA
+│   ├── Collections Framework Internals
+│   ├── Streams / Lambdas / Optionals
+│   ├── Concorrência (CompletableFuture, Virtual Threads)
+│   └── Records, Sealed Classes, Pattern Matching
+│
+├── ECOSSISTEMA DE BUILD & QUALIDADE
+│   ├── Maven / Gradle
+│   ├── JUnit 5 / Mockito / Testcontainers
+│   └── SonarQube / JaCoCo / Análise Estática
+│
+├── FRAMEWORKS
+│   ├── Spring (Core → Boot → Data → Security → Batch → Cloud → WebFlux)
+│   └── Quarkus (CDI, GraalVM, MicroProfile, Dev Services)
+│
+├── MENSAGERIA & EVENTOS
+│   ├── Kafka (Streams, Connect, Schema Registry)
+│   └── RabbitMQ (AMQP, DLQ, Spring AMQP)
+│
+├── PERSISTÊNCIA
+│   ├── SQL Avançado + PostgreSQL Internals
+│   ├── Hibernate/JPA Avançado
+│   ├── Redis / MongoDB / Elasticsearch
+│   └── Flyway / Liquibase
+│
+├── CLOUD & DEVOPS
+│   ├── AWS (ECS, EKS, Lambda, SQS/SNS, RDS, ElastiCache)
+│   ├── Docker (multi-stage, distroless)
+│   ├── Kubernetes (HPA, Helm, Probes)
+│   └── CI/CD + Observabilidade (OTel, Prometheus, ELK)
+│
+└── ARQUITETURA & MENTALIDADE SÊNIOR
+    ├── Design Patterns GoF
+    ├── SOLID / Clean Architecture / Hexagonal
+    ├── DDD (Aggregates, Bounded Contexts, Domain Events)
+    ├── Microsserviços (CQRS, Event Sourcing, Saga)
+    ├── Resiliência (Resilience4j)
+    ├── Performance Profiling (JFR/JMC, heap/thread dumps)
+    └── System Design (Google, Amazon, Netflix-scale)
+```
+
+---
+
+### Estimativa Realista de Tempo por Fase
+
+| Fase | Conteúdo | Semanas | Horas Totais |
+|------|----------|---------|--------------|
+| 1 | Fundamentos & JVM Internals | 6 | 240h |
+| 2 | Java Moderno & APIs Essenciais | 5 | 200h |
+| 3 | Build, Testes & Qualidade | 4 | 160h |
+| 4 | Spring Ecosystem | 10 | 400h |
+| 5 | Quarkus | 4 | 160h |
+| 6 | Mensageria & Sistemas Distribuídos | 5 | 200h |
+| 7 | Persistência & Bancos de Dados | 5 | 200h |
+| 8 | Cloud, Infra & DevOps | 6 | 240h |
+| 9 | Arquitetura & Mentalidade Sênior | 7 | 280h |
+| **TOTAL** | | **52 semanas** | **~2.080h** |
+
+---
+
+### Indicadores de Domínio por Fase (Gate Criteria)
+
+**Fase 1** — consegue explicar heap/stack/metaspace em entrevista, tunar flags JVM, analisar GC logs reais, escrever código thread-safe demonstrando happens-before.
+
+**Fase 2** — implementa um pipeline de Streams complexo com collectors customizados, resolve exercícios de concorrência com CompletableFuture e Virtual Threads sem data races.
+
+**Fase 3** — cobertura ≥ 85% em projeto real, pipeline de CI com análise estática bloqueante, testes de contrato passando com Pact.
+
+**Fase 4** — consegue explicar o ciclo de vida de um bean Spring, implementar AutoConfiguration customizada, oauth2 Resource Server com roles e método security.
+
+**Fase 5** — build nativo Quarkus funcional com tempo de startup < 50ms, extensão customizada com Dev Service funcionando.
+
+**Fase 6** — implementa Saga Pattern com Kafka + Outbox, explica exatamente-once semantics e compensating transactions.
+
+**Fase 7** — otimiza query com N+1 problem usando batch fetch, explica MVCC do PostgreSQL, implementa cache L2 com Redis e invalidação correta.
+
+**Fase 8** — provisiona infraestrutura com Terraform, configura HPA no K8s, CI/CD completo com rollback automático, traces distribuídos no Grafana.
+
+**Fase 9** — realiza system design de plataforma de pagamentos em 45 minutos com justificativas arquiteturais, faz code review apontando race conditions e vazamentos de memória.
+
+---
+
+### Recursos Principais por Fase (Visão Resumida)
+
+| Fase | Livro Principal | Documentação Oficial | Repositório Referência |
+|------|----------------|----------------------|------------------------|
+| 1-2 | Effective Java (Bloch) | docs.oracle.com/javase | openjdk/jdk |
+| 2 | Java Concurrency in Practice (Goetz) | JEPs (loom, records) | jdk-sandbox |
+| 3 | Growing Object-Oriented Software | junit.org, mockito.org | spring-petclinic |
+| 4 | Spring in Action 6 (Walls) | docs.spring.io | spring-boot (github) |
+| 5 | Quarkus in Action | quarkus.io/guides | quarkusio/quarkus |
+| 6 | Designing Data-Intensive Apps (Kleppmann) | kafka.apache.org | confluentinc/examples |
+| 7 | High Performance MySQL | postgresql.org/docs | pganalyze/collector |
+| 8 | The DevOps Handbook | docs.aws.amazon.com | aws-samples |
+| 9 | Clean Architecture (Martin) + DDD (Evans) | microservices.io | eventuate-tram-sagas |
+
+---
+
+---
+
+## PARTE 2 — PLANO SEMANAL DETALHADO
+
+---
+
+### 🔷 FASE 1 — FUNDAMENTOS SÓLIDOS E LOW-LEVEL JAVA (Semanas 1–6)
+
+---
+
+#### SEMANA 1 — Revisão Cirúrgica de Fundamentos + OOP Profunda
+
+**Tema Central:** Solidificar sintaxe, tipos, controle de fluxo e OOP com qualidade de produção.
+
+**Distribuição das 8h diárias:**
+- 2h leitura ativa (Effective Java, capítulos 1–4)
+- 3h codificação prática orientada a exercícios
+- 1h revisão com Anki (criar cards sobre regras do Effective Java)
+- 1h refatoração de código próprio com feedback do compilador e checkstyle
+- 1h exercícios no Exercism.org (trilha Java)
+
+**Projeto Prático Obrigatório:**
+Implemente um sistema de `Biblioteca Digital` usando apenas Java puro (sem frameworks). Requisitos:
+- Herança vs composição: `Publicacao → Livro, Artigo, Revista`
+- Interfaces com default methods (`Emprestavel`, `Pesquisavel`)
+- Enum para status com comportamento polimórfico
+- Custom Exceptions com hierarquia (`BibliotecaException → ItemIndisponivelException`)
+- Generics: `Repositorio<T extends Publicacao>`
+- Nenhum campo público; encapsulamento total
+
+**Técnica Ultralearning:** *Prática Direta* — toda teoria codificada imediatamente.
+
+**Ferramenta de Feedback:** Checkstyle + compilador + testes JUnit 5 básicos + peer review via ChatGPT/Claude para verificar design.
+
+**Armadilhas Comuns:**
+- Usar herança onde composição seria melhor (regra: "É um" vs "Tem um")
+- Ignorar a diferença entre `equals/hashCode` e referência de objeto
+- Criar hierarquias de exceção sem considerar checked vs unchecked
+
+---
+
+#### SEMANA 2 — Generics Avançados + Reflection + Annotations
+
+**Tema Central:** Dominar o sistema de tipos avançado do Java e metaprogramação.
+
+**Distribuição das 8h diárias:**
+- 2h teoria profunda (wildcards, bounded types, type erasure — ler o JLS)
+- 3h implementação de framework mini usando Reflection + Annotations
+- 1h leitura de código-fonte: como Spring usa `@Autowired` internamente
+- 1h Anki + revisão spaced repetition das regras de Generics
+- 1h Exercism (exercícios de generics) + LeetCode (estruturas com generics)
+
+**Projeto Prático Obrigatório:**
+Implemente um **mini framework de injeção de dependências** com:
+- Annotation `@Inject`, `@Component`, `@Singleton`
+- `ApplicationContext` que varre classpath via Reflection
+- Resolve dependências circulares (e lança exceção clara se insolúvel)
+- Suporte a `@PostConstruct`
+- Testes: valide que beans são criados corretamente
+
+**Técnica Ultralearning:** *Intuição* — ler o código-fonte de frameworks para entender o "porquê" antes de usar.
+
+**Ferramenta de Feedback:** Testes unitários cobrindo todos os casos de uso; comparar implementação com Guice (Google) via leitura de código.
+
+**Armadilhas Comuns:**
+- Confundir `? extends T` (produtor) com `? super T` (consumidor) — regra PECS
+- Acreditar que Generics existem em runtime (type erasure elimina em bytecode)
+- Usar Reflection sem tratamento de `IllegalAccessException` e `ClassNotFoundException`
+
+---
+
+#### SEMANA 3 — JVM Internals I: ClassLoader, Bytecode, JIT
+
+**Tema Central:** Entender o que acontece com seu código Java antes e durante a execução.
+
+**Distribuição das 8h diárias:**
+- 2h teoria: ClassLoader hierarchy, bytecode (javap), JIT phases (C1/C2)
+- 2h laboratório: descompilar classes com `javap -c -verbose`, analisar bytecode
+- 2h projeto prático (ver abaixo)
+- 1h leitura: JEPs relacionados (JEP 295 — AOT, JEP 483 — AOT Java 24)
+- 1h revisão e Anki
+
+**Projeto Prático Obrigatório:**
+- Crie um **ClassLoader customizado** que carrega classes criptografadas em disco e as decripta em runtime
+- Use `javap` para comparar bytecode de: loop for, stream, lambda, método recursivo vs iterativo
+- Escreva um relatório (README.md) explicando cada instrução bytecode dos exemplos
+
+**Técnica Ultralearning:** *Drill* — foco cirúrgico em um componente da JVM por vez.
+
+**Ferramenta de Feedback:** Comparar análise de bytecode com material do livro "Inside the Java Virtual Machine" (Venners) + validação com JVM TI agent básico.
+
+**Armadilhas Comuns:**
+- Acreditar que Java é lento sem entender que o JIT pode fazer inlining e escape analysis
+- Ignorar o double-check locking e seus problemas pré-Java 5
+
+---
+
+#### SEMANA 4 — JVM Internals II: Garbage Collectors + Tuning
+
+**Tema Central:** Dominar o ciclo de vida de objetos, GC algorithms e tuning de produção.
+
+**Distribuição das 8h diárias:**
+- 2h teoria: G1GC regions, ZGC concurrent phases, Shenandoah barriers
+- 2h laboratório GC: geração de GC logs reais, análise com GCViewer e GCEasy
+- 2h projeto prático (ver abaixo)
+- 1h simulação: criar memory leak deliberado e diagnosticar com heap dump (VisualVM/MAT)
+- 1h Anki: flags JVM críticas (`-Xms`, `-Xmx`, `-XX:+UseG1GC`, `-XX:MaxGCPauseMillis`, etc.)
+
+**Projeto Prático Obrigatório:**
+Crie um **benchmark de GC** com JMH (Java Microbenchmark Harness):
+- Aloque objetos de diferentes tamanhos e lifetimes
+- Compare G1GC vs ZGC em latência de pause e throughput
+- Gere relatório com gráficos de GC pause time usando dados reais dos logs
+- Documente as flags usadas e o impacto de cada uma
+
+**Técnica Ultralearning:** *Experimentação* — comparar abordagens com benchmarks reais, não opiniões.
+
+**Ferramenta de Feedback:** JMH results + GCEasy analysis + validação cruzada com documentação Oracle.
+
+**Armadilhas Comuns:**
+- Ajustar heap sem considerar o padrão de alocação da aplicação
+- Usar `-Xmx` igual a `-Xms` sem entender o custo de heap comprometido
+- Ignorar metaspace (OutOfMemoryError: Metaspace é diferente de heap)
+
+---
+
+#### SEMANA 5 — Java Memory Model (JMM) + Concorrência Profunda
+
+**Tema Central:** Entender a raiz teórica da concorrência Java para nunca escrever código com race conditions.
+
+**Distribuição das 8h diárias:**
+- 2h teoria: happens-before, visibility, atomicidade, volatile, synchronized semântica
+- 1h leitura: capítulos 1–5 "Java Concurrency in Practice" (Goetz)
+- 3h implementação prática de primitivos de concorrência
+- 1h análise de bugs de concorrência clássicos (double-check locking pré-Java 5, lazy init)
+- 1h Anki + revisão
+
+**Projeto Prático Obrigatório:**
+Implemente **do zero** (sem usar `java.util.concurrent`):
+- `ReentrantLock` simplificado usando `synchronized` + `wait/notify`
+- `BoundedBlockingQueue<T>` thread-safe com capacidade configurável
+- `ThreadSafeCounter` com e sem `volatile` — benchmark comparativo
+- Demonstre visualmente (com logs) a diferença entre código com e sem `volatile`
+
+**Técnica Ultralearning:** *Prática Direta* — implementar os primitivos antes de usar os prontos.
+
+**Ferramenta de Feedback:** Testes de stress com múltiplas threads (10.000 iterações concorrentes) + análise com Java Flight Recorder.
+
+**Armadilhas Comuns:**
+- Confundir atomicidade com visibilidade (são garantias diferentes)
+- Usar `volatile` para operações compostas (check-then-act não é atômico)
+- Esquecer que `HashMap` em ambiente concorrente pode causar loop infinito em resize
+
+---
+
+#### SEMANA 6 — Concorrência Avançada: java.util.concurrent + JNI
+
+**Tema Central:** Dominar o toolkit de concorrência de alto nível e entender as fronteiras do Java.
+
+**Distribuição das 8h diárias:**
+- 2h teoria: Executors, ThreadPoolExecutor internals, Fork/Join, semáforos
+- 2h laboratório: Fork/Join para processamento paralelo de dados
+- 2h projeto prático (ver abaixo)
+- 1h JNI: conceitos, casos de uso, riscos, alternativas modernas (Panama API)
+- 1h revisão de toda a Fase 1 + atualização do Anki deck
+
+**Projeto Prático Obrigatório:**
+Implemente um **sistema de processamento de arquivos CSV paralelo**:
+- `ThreadPoolExecutor` customizado com política de rejeição específica
+- `Fork/Join` para dividir arquivos grandes em chunks e processar em paralelo
+- `CountDownLatch` para sincronização de fase de merge
+- `CompletableFuture` para orquestração do pipeline async
+- Benchmark: compare single-thread vs parallel performance
+
+**Técnica Ultralearning:** *Retenção* — escrever um blog post/README detalhado explicando cada decisão de design.
+
+**Ferramenta de Feedback:** JFR recording da execução, análise de thread contention, comparação com biblioteca rival (RxJava).
+
+**Armadilhas Comuns:**
+- Criar `ThreadPool` muito grande (context switch overhead supera ganho de paralelismo)
+- Esquecer de tratar exceções dentro de `Callable` (são engolidas silenciosamente em `Future.get()`)
+- Usar `ForkJoinPool.commonPool()` para tarefas bloqueantes (paralisa o pool do sistema)
+
+---
+
+### 🔷 FASE 2 — JAVA MODERNO E APIs ESSENCIAIS (Semanas 7–11)
+
+---
+
+#### SEMANA 7 — Collections Framework Internals
+
+**Tema Central:** Entender o "por dentro" das estruturas de dados para fazer escolhas corretas em produção.
+
+**Distribuição das 8h diárias:**
+- 2h teoria: HashMap internals (hash function, bucket, treeification em Java 8+), ArrayList vs LinkedList performance real
+- 2h leitura de código-fonte: `HashMap.java`, `ArrayList.java`, `TreeMap.java` no OpenJDK
+- 3h implementação prática
+- 1h benchmarks com JMH comparando estruturas
+
+**Projeto Prático Obrigatório:**
+Implemente um **HashMap do zero** com:
+- Hashing, chaining, load factor e resize automático
+- Comparar performance com `java.util.HashMap` via JMH
+- Demonstrar quando `TreeMap` é preferível ao `HashMap` (com benchmark)
+- Implementar `LRUCache` usando `LinkedHashMap` com `removeEldestEntry`
+
+**Armadilhas Comuns:**
+- Usar `LinkedList` acreditando que inserção é sempre mais rápida que `ArrayList`
+- Iterar sobre `HashMap` e modificá-lo simultaneamente (`ConcurrentModificationException`)
+- Usar coleções mutáveis em chaves de `HashMap` (contrato `hashCode` violado)
+
+---
+
+#### SEMANA 8 — Streams API, Lambdas e Functional Programming
+
+**Tema Central:** Dominar o paradigma funcional em Java com profundidade real.
+
+**Distribuição das 8h diárias:**
+- 1h teoria: lazy evaluation, intermediate vs terminal operations, Spliterator
+- 2h laboratório: collectors customizados, `Collector.of()`, downstream collectors
+- 3h projeto prático
+- 1h análise de performance: Stream vs for-loop vs parallel Stream (JMH benchmarks)
+- 1h Exercism: exercícios de programação funcional
+
+**Projeto Prático Obrigatório:**
+Construa um **pipeline de análise de dados de vendas**:
+- Lê dados de CSV (sem biblioteca externa), processa com Streams
+- Implementa `Collector<T,A,R>` customizado para estatísticas agregadas
+- Usa `groupingBy`, `partitioningBy`, `teeing` (Java 12+)
+- Compara performance serial vs parallel Stream em datasets de tamanhos diferentes
+- Demonstra onde `parallel()` prejudica ao invés de ajudar
+
+**Armadilhas Comuns:**
+- Usar `parallel()` em todo lugar sem medir (overhead > ganho em datasets pequenos)
+- Stream com estado compartilhado em operações paralelas (race condition silenciosa)
+- `Optional` como campo de classe (não é serializável e não foi projetado para isso)
+
+---
+
+#### SEMANA 9 — CompletableFuture e Async Programming
+
+**Tema Central:** Programação assíncrona sem bloquear threads, padrão de produção em sistemas modernos.
+
+**Distribuição das 8h diárias:**
+- 2h teoria: CompletableFuture API completa, thread pools padrão, exception handling
+- 3h projeto prático com chamadas async encadeadas
+- 1h comparação com RxJava e Project Reactor (preparação para WebFlux)
+- 1h leitura: JEP 425 (Virtual Threads)
+- 1h revisão + Anki
+
+**Projeto Prático Obrigatório:**
+Construa um **aggregator de dados de múltiplas "APIs" simuladas** (métodos que dormem):
+- Busca dados de 5 "fontes" em paralelo com `CompletableFuture.allOf()`
+- Timeout por chamada com `orTimeout()`
+- Fallback com `exceptionally()` e `handle()`
+- Composição de pipelines com `thenCompose()` vs `thenApply()`
+- Demonstre diferença entre `thenApply()` (síncrono) e `thenApplyAsync()` (novo thread)
+
+**Armadilhas Comuns:**
+- Esquecer de especificar Executor customizado (usa `commonForkJoinPool` por padrão)
+- Encadear `thenApply` sem tratar exceções intermediárias (falhas silenciosas)
+- Confundir `thenCompose` (flatMap) com `thenApply` (map)
+
+---
+
+#### SEMANA 10 — Virtual Threads (Project Loom) + Java 16–21 Features
+
+**Tema Central:** Aproveitar as inovações do Java moderno que mudaram a forma de escrever código concorrente e expressivo.
+
+**Distribuição das 8h diárias:**
+- 2h Virtual Threads: comparação com platform threads, structured concurrency, `StructuredTaskScope`
+- 2h features modernas: Records, Sealed Classes, Pattern Matching (switch expressions, guarded patterns)
+- 2h projeto prático
+- 1h leitura de JEPs: 444 (Virtual Threads), 441 (Pattern Matching for switch), 409 (Sealed Classes)
+- 1h benchmark: Virtual Threads vs CompletableFuture vs Platform Threads em I/O-bound workload
+
+**Projeto Prático Obrigatório:**
+Refatore o projeto da Semana 9 para usar Virtual Threads:
+- `Thread.ofVirtual().start(...)` e `Executors.newVirtualThreadPerTaskExecutor()`
+- `StructuredTaskScope.ShutdownOnFailure` para gerenciamento de escopo
+- Modele domínio com Records e Sealed Classes (ex: `Result<T>` como sealed: `Success | Failure`)
+- Pattern Matching em switch para processar tipos de eventos
+
+**Armadilhas Comuns:**
+- Usar `synchronized` com Virtual Threads (causa pinning — prefira `ReentrantLock`)
+- Achar que Virtual Threads substituem reactive programming em todos os casos
+- Usar `ThreadLocal` com Virtual Threads sem entender o comportamento de herança
+
+---
+
+#### SEMANA 11 — Módulos JPMS + I/O Avançado + Serialização
+
+**Tema Central:** Sistemas de módulos, I/O de alto desempenho e serialização moderna.
+
+**Distribuição das 8h diárias:**
+- 1h teoria: JPMS, `module-info.java`, `requires`, `exports`, `opens`, `uses/provides`
+- 1h laboratório NIO.2: `FileChannel`, `ByteBuffer`, `MappedByteBuffer`, `AsynchronousFileChannel`
+- 2h projeto prático I/O de alto desempenho
+- 2h serialização: Java nativo vs JSON (Jackson internals) vs Protobuf vs Avro
+- 1h JPMS na prática: modularizar projeto existente
+- 1h revisão da Fase 2 + atualizar Anki
+
+**Projeto Prático Obrigatório:**
+Construa um **servidor de arquivos de alta performance** usando apenas NIO.2:
+- `AsynchronousServerSocketChannel` para aceitar conexões
+- `FileChannel.transferTo()` para zero-copy transfer
+- Benchmark: NIO vs I/O tradicional em transferência de arquivos grandes (1GB+)
+- Serializar/desserializar objetos em Protobuf e comparar tamanho/velocidade com JSON
+
+**Armadilhas Comuns:**
+- Usar `ObjectInputStream` para dados críticos (segurança: desserialização arbitrária de classes)
+- `ByteBuffer` sem `.flip()` antes de ler (posição errada, lê lixo)
+- Módulos com `opens` muito amplos anulam o propósito do encapsulamento
+
+---
+
+### 🔷 FASE 3 — BUILD, TESTES E QUALIDADE (Semanas 12–15)
+
+---
+
+#### SEMANA 12 — Maven Avançado + Gradle com Kotlin DSL
+
+**Tema Central:** Build systems como ferramenta de produtividade e governança técnica, não como obstáculo.
+
+**Distribuição das 8h diárias:**
+- 2h Maven: lifecycle profundo, plugins (compiler, surefire, failsafe, shade), multi-module BOM
+- 2h Gradle Kotlin DSL: tasks customizadas, build caching, composite builds
+- 2h projeto prático
+- 1h análise de builds reais (Spring Boot, Quarkus) — como eles estruturam seus builds
+- 1h revisão + documentação
+
+**Projeto Prático Obrigatório:**
+Crie um **projeto multi-módulo Maven** com:
+- `parent-pom` com `dependencyManagement` (BOM)
+- Módulos: `domain`, `infrastructure`, `api`, `app`
+- Plugin customizado Maven (Mojo simples que gera relatório de dependências)
+- Em paralelo: migre para Gradle com Kotlin DSL mantendo as mesmas funcionalidades
+- Pipeline de build local: compile → test → jacoco → checkstyle → verify
+
+**Armadilhas Comuns:**
+- Circular dependencies entre módulos Maven
+- Gradle build sem cache configurado (lento desnecessariamente)
+- Plugin versions não fixadas (builds não-determinísticos)
+
+---
+
+#### SEMANA 13 — JUnit 5 Avançado + Mockito + Testcontainers
+
+**Tema Central:** Testes como documentação viva e rede de segurança para refatoração.
+
+**Distribuição das 8h diárias:**
+- 1h JUnit 5: Extensions, `@ParameterizedTest` com `@MethodSource`, `@DynamicTest`, `@TestTemplate`
+- 1h Mockito: `ArgumentCaptor`, `@Spy`, `InOrder`, verificações de interação avançadas
+- 2h Testcontainers: PostgreSQL, Kafka, Redis em testes de integração
+- 3h projeto prático — testar o sistema de Biblioteca Digital da Semana 1 extensivamente
+- 1h revisão de "Test Driven Development by Example" (Kent Beck) — capítulos selecionados
+
+**Projeto Prático Obrigatório:**
+Adicione **suíte completa de testes** ao projeto da Semana 1:
+- Unitários: cobertura ≥ 90% com Mockito para isolamento de dependências
+- `ParameterizedTest` para casos de borda (null, empty, max values)
+- Testes de integração com Testcontainers (PostgreSQL real)
+- `@ExtendWith` com Extension customizada que popula banco antes de cada teste
+- Demonstre TDD adicionando uma nova feature com testes escritos primeiro
+
+**Armadilhas Comuns:**
+- Testes que testam mocks (não testam lógica real)
+- `@BeforeEach` com setup muito pesado (lentidão acumulada)
+- Testcontainers sem `@Singleton` container (reinicia container a cada teste)
+
+---
+
+#### SEMANA 14 — BDD (Cucumber) + Testes de Contrato (Pact) + Performance (Gatling)
+
+**Tema Central:** Validar comportamento do sistema além do código unitário, incluindo contratos entre serviços.
+
+**Distribuição das 8h diárias:**
+- 2h Cucumber: cenários Gherkin, Step Definitions, hooks, data tables, scenario outlines
+- 2h Pact: Consumer-Driven Contract Testing, publicação de contratos, verificação no provider
+- 2h Gatling: simulation scripts, cenários de carga, ramp-up, assertions de SLA
+- 1h leitura: "Testing Microservices" capítulos sobre contract testing
+- 1h análise de resultados Gatling com dashboard
+
+**Projeto Prático Obrigatório:**
+Para uma API simples de pedidos:
+- Escreva cenários BDD em Gherkin descrevendo fluxo de pedido
+- Implemente Step Definitions em Java
+- Defina contrato Pact entre cliente (consumer) e API (provider)
+- Script Gatling: 100 usuários simultâneos, ramp-up de 30s, 5 minutos de duração
+- SLA: 95% das requests < 200ms; taxa de erro < 1%
+
+**Armadilhas Comuns:**
+- Cenários BDD escritos como testes de implementação (devem ser regras de negócio)
+- Contratos Pact não versionados (breaking changes silenciosos)
+- Testes de carga sem isolamento de ambiente (dados de produção afetados)
+
+---
+
+#### SEMANA 15 — SonarQube + JaCoCo + Análise Estática Completa
+
+**Tema Central:** Qualidade como processo contínuo automatizado, não revisão manual esporádica.
+
+**Distribuição das 8h diárias:**
+- 2h SonarQube: Quality Gates customizados, regras, security hotspots, cognitive complexity
+- 1h JaCoCo: cobertura por linha/branch/método, excluções justificadas, relatórios
+- 1h SpotBugs: categorias de bugs (correctness, performance, security), anotações `@SuppressFBWarnings`
+- 2h projeto prático: integrar tudo em pipeline local
+- 1h Checkstyle: regras do Google Java Style Guide, customização de regras
+- 1h revisão da Fase 3
+
+**Projeto Prático Obrigatório:**
+Configure um **Quality Gate completo** para o projeto existente:
+- SonarQube local (Docker) com Quality Gate: 0 bugs, 0 security hotspots não revisados, coverage ≥ 80%
+- Checkstyle com Google Style, sem exceções não documentadas
+- SpotBugs com perfil de segurança ativado
+- PMD: regras de design e performance
+- Script que falha o build se qualquer gate não passa
+
+**Armadilhas Comuns:**
+- Cobertura de código como métrica principal (código pode ter 100% de cobertura e bugs graves)
+- `@SuppressFBWarnings` sem comentário explicando o porquê
+- SonarQube com perfil padrão (personalizar regras para o contexto do projeto)
+
+---
+
+### 🔷 FASE 4 — SPRING ECOSYSTEM (Semanas 16–25)
+
+---
+
+#### SEMANA 16 — Spring Core: IoC, DI Avançado e Bean Lifecycle
+
+**Tema Central:** Entender Spring de dentro para fora — o container IoC antes de qualquer auto-magic.
+
+**Distribuição das 8h diárias:**
+- 2h teoria: `BeanFactory` vs `ApplicationContext`, `BeanDefinition`, `BeanPostProcessor`, `BeanFactoryPostProcessor`
+- 2h leitura de código-fonte Spring: `DefaultListableBeanFactory`, `AnnotationConfigApplicationContext`
+- 3h projeto prático
+- 1h Anki: anotações Spring e seus contratos
+
+**Projeto Prático Obrigatório:**
+Implemente extensões do Spring Core:
+- `BeanPostProcessor` que adiciona logging automático em todos os beans marcados com `@Auditable`
+- `BeanFactoryPostProcessor` que valida configuração na inicialização
+- `@Conditional` customizado: `@ConditionalOnDatabaseType` que ativa beans por tipo de banco
+- Demonstre todos os eventos do lifecycle (`@PostConstruct`, `DisposableBean`, `SmartLifecycle`)
+- Profiles com `@Profile` + override por variável de ambiente
+
+**Armadilhas Comuns:**
+- `@Autowired` em campo (dificulta teste e cria dependências invisíveis — use construtor)
+- Beans `@Scope("prototype")` injetados em singletons (prototype fica "preso" como singleton)
+- Circular dependency com `@Lazy` como solução sem entender o problema real
+
+---
+
+#### SEMANA 17 — Spring MVC: DispatcherServlet + Controllers + Filtros
+
+**Tema Central:** Dominar o pipeline HTTP do Spring do nível mais baixo ao mais alto.
+
+**Distribuição das 8h diárias:**
+- 2h teoria: `DispatcherServlet` lifecycle, `HandlerMapping`, `HandlerAdapter`, `ViewResolver`
+- 1h leitura código-fonte: `DispatcherServlet.doDispatch()`
+- 3h projeto prático com todos os componentes
+- 1h HATEOAS: `WebMvcLinkBuilder`, `RepresentationModel`
+- 1h revisão + testes de integração com `MockMvc`
+
+**Projeto Prático Obrigatório:**
+Construa **API REST de e-commerce** com Spring MVC (sem Spring Boot):
+- `Filter` para logging de requests (inclui correlation ID propagado via MDC)
+- `HandlerInterceptor` para rate limiting por IP (contador em memória)
+- `@ControllerAdvice` com hierarquia de exceções customizadas → HTTP status codes corretos
+- `@InitBinder` para validação customizada de datas
+- HATEOAS: links de next/prev em listagens paginadas
+
+**Armadilhas Comuns:**
+- `Filter` vs `Interceptor` — Filters são Servlet spec (antes do Spring), Interceptors são Spring (têm acesso ao handler)
+- `@ResponseBody` vs `ResponseEntity` — use `ResponseEntity` quando precisar controlar headers/status dinamicamente
+- Exception Handler de `@RestController` não captura exceções de Filters (usar `ErrorController`)
+
+---
+
+#### SEMANA 18 — Spring Boot: AutoConfiguration + Actuator + ConfigurationProperties
+
+**Tema Central:** Entender a "mágica" do Spring Boot para usá-la e estendê-la com confiança.
+
+**Distribuição das 8h diárias:**
+- 2h teoria: `spring.factories` / `AutoConfiguration.imports`, `@ConditionalOn*`, `ImportSelector`
+- 2h laboratório: criar AutoConfiguration customizada do zero
+- 2h projeto prático
+- 1h Actuator: endpoints customizados, `HealthIndicator`, `InfoContributor`
+- 1h `@ConfigurationProperties` com validação via Bean Validation, nested properties, `@ConstructorBinding`
+
+**Projeto Prático Obrigatório:**
+Crie um **Spring Boot Starter customizado** para auditoria:
+- `AutoConfiguration` que ativa `AuditService` apenas se `@EnableAudit` presente
+- `@ConfigurationProperties(prefix = "audit")` com validação
+- `Actuator` endpoint: `GET /actuator/audit-stats`
+- Health indicator que verifica disponibilidade do serviço de auditoria
+- Teste com `@SpringBootTest` + `ApplicationContextRunner`
+
+**Armadilhas Comuns:**
+- AutoConfiguration sem ordem (`@AutoConfigureBefore/After`) pode causar conflitos
+- `@ConfigurationProperties` sem `@Validated` aceita configuração inválida silenciosamente
+- Actuator exposto sem segurança em produção (endpoint `/actuator/env` vaza secrets)
+
+---
+
+#### SEMANA 19 — Spring Data JPA Avançado
+
+**Tema Central:** ORM de produção: performance, flexibilidade e evitar as armadilhas clássicas.
+
+**Distribuição das 8h diárias:**
+- 2h teoria: 1st/2nd level cache, N+1 problem diagnóstico e solução, fetch strategies
+- 2h laboratório: Specification API, QueryDSL, projeções (interface, DTO, tuple)
+- 3h projeto prático
+- 1h análise de queries geradas pelo Hibernate com `hibernate.show_sql` + `explain analyze`
+
+**Projeto Prático Obrigatório:**
+Construa **repositório avançado** para sistema de e-commerce:
+- Detecção e solução do N+1: use `@EntityGraph` e `JOIN FETCH` estrategicamente
+- `Specification<T>` para filtros dinâmicos combinables
+- QueryDSL para queries type-safe complexas com múltiplos joins
+- Paginação com `Slice` vs `Page` — demonstre diferença de performance
+- Auditoria com Spring Data Auditing (`@CreatedDate`, `@LastModifiedBy`, `AuditorAware`)
+- `@Version` para optimistic locking — demonstre `OptimisticLockException` e tratamento
+
+**Armadilhas Comuns:**
+- `FetchType.EAGER` em relacionamentos (causa N+1 implícito)
+- `@Transactional` em métodos de serviço que chamam repositórios — entender propagação
+- `save()` vs `saveAndFlush()` — diferença de quando o SQL é executado
+
+---
+
+#### SEMANA 20 — Spring Security: JWT + OAuth2 + OIDC
+
+**Tema Central:** Segurança não é feature — é requisito. Implementar corretamente desde o início.
+
+**Distribuição das 8h diárias:**
+- 2h teoria: `SecurityFilterChain`, `AuthenticationManager`, `UserDetailsService`, JWT structure
+- 2h laboratório OAuth2/OIDC: Resource Server, Authorization Server (Spring Authorization Server)
+- 3h projeto prático
+- 1h OWASP Top 10 no contexto Spring: SQL Injection, XSS, CSRF, Broken Authentication
+
+**Projeto Prático Obrigatório:**
+Implemente **sistema de autenticação e autorização completo**:
+- Login com JWT (access token 15min + refresh token 7 dias com rotação)
+- `ResourceServer` que valida JWT via JWKS endpoint
+- `@PreAuthorize` com SpEL para autorização baseada em roles e claims
+- Rate limiting no endpoint de login (prevenir brute force)
+- OAuth2 Social Login (Google) com mapeamento de claims
+- CSRF: entender quando desabilitar (APIs stateless) e quando manter
+
+**Armadilhas Comuns:**
+- JWT secrets fracos ou hardcoded em código
+- Refresh token sem rotação (comprometido = acesso indefinido)
+- `@Secured` vs `@PreAuthorize` — `@PreAuthorize` com SpEL é mais flexível e deve ser padrão
+- Não invalidar tokens em logout (use blacklist com Redis ou token versioning)
+
+---
+
+#### SEMANA 21 — Spring Batch: Processamento em Lote
+
+**Tema Central:** Processar milhões de registros de forma confiável, restartável e monitorável.
+
+**Distribuição das 8h diárias:**
+- 2h teoria: Job/Step/Chunk model, JobRepository, `ItemReader → ItemProcessor → ItemWriter`
+- 2h laboratório: Partitioning, Retry/Skip, `@JobScope`, `@StepScope`
+- 3h projeto prático
+- 1h monitoramento: Spring Batch Admin / Actuator batch endpoints
+
+**Projeto Prático Obrigatório:**
+Construa um **pipeline de processamento de notas fiscais**:
+- `FlatFileItemReader` → `ItemProcessor` (validação + enriquecimento) → `JdbcBatchItemWriter`
+- Partitioning: divide arquivo por ranges para processamento paralelo
+- Retry automático em falhas transientes (ex: timeout de rede)
+- Skip com log de itens inválidos sem parar o job
+- Restart: job interrompido retoma do último checkpoint
+- Scheduling com `@Scheduled` + controle via `JobLauncher`
+
+**Armadilhas Comuns:**
+- `JobParameters` imutáveis por design — não tentar reutilizar parâmetros entre execuções
+- Writer sem batch size otimizado (INSERT linha a linha é catastrófico para performance)
+- Não configurar `DataSourceTransactionManager` corretamente → commits parciais
+
+---
+
+#### SEMANA 22 — Spring WebFlux: Reactive Programming
+
+**Tema Central:** Programação reativa para sistemas de altíssima concorrência com baixo footprint de threads.
+
+**Distribuição das 8h diárias:**
+- 2h teoria: Project Reactor (Mono, Flux, Schedulers), backpressure, operadores principais
+- 1h comparação: quando WebFlux vs Web MVC (não é sempre melhor — overhead em CRUD simples)
+- 3h projeto prático reativo
+- 1h R2DBC: acesso reativo a banco de dados
+- 1h debugging de pipelines reativos (operador `.log()`, rastreamento de stack com `Hooks.onOperatorDebug()`)
+
+**Projeto Prático Obrigatório:**
+Construa **streaming de dados em tempo real** com WebFlux:
+- `RouterFunction` + `HandlerFunction` (estilo funcional)
+- SSE (Server-Sent Events) para streaming de eventos para browser
+- `WebClient` reativo com retry, timeout e circuit breaker
+- Pipeline reativo completo: dados chegam via Kafka → processados com Flux → enviados via SSE
+- Backpressure: demonstre `onBackpressureDrop` vs `onBackpressureBuffer`
+
+**Armadilhas Comuns:**
+- Bloquear dentro de pipeline reativo (`.block()`, `Thread.sleep()`) — paralisa o event loop
+- Não subscrever ao Mono/Flux (nothing happens até `.subscribe()`)
+- Tentar usar `ThreadLocal` em contexto reativo — use `Context` do Reactor
+
+---
+
+#### SEMANA 23 — Spring Cloud: Config, Eureka, Gateway, Circuit Breaker
+
+**Tema Central:** Infraestrutura de microsserviços com Spring Cloud.
+
+**Distribuição das 8h diárias:**
+- 2h Config Server: propriedades por ambiente, encriptação de secrets, refresh automático
+- 1h Eureka: service discovery, heartbeat, zonas
+- 2h Gateway: predicates, filters customizados, rate limiting, routing dinâmico
+- 2h Resilience4j: Circuit Breaker, Rate Limiter, Bulkhead, Retry, TimeLimiter
+- 1h OpenFeign com Resilience4j integrado
+
+**Projeto Prático Obrigatório:**
+Construa **infraestrutura de microsserviços** com 3 serviços:
+- Config Server centralizando configurações
+- API Gateway com autenticação JWT, rate limiting e routing
+- Service A chama Service B via OpenFeign com Circuit Breaker
+- Demonstre fallback quando Service B está down
+- Health checks customizados registrados no Eureka
+
+**Armadilhas Comuns:**
+- Config Server sem branch de ambiente (todos os ambientes com mesma config)
+- Circuit Breaker sem monitoramento (falhas silenciosas no Bulkhead)
+- Eureka sem zona de disponibilidade configurada (chamadas cross-zone em produção)
+
+---
+
+#### SEMANA 24 — Spring Integration + Mensageria com Spring
+
+**Tema Central:** Integração de sistemas com padrões Enterprise Integration Patterns (EIP).
+
+**Distribuição das 8h diárias:**
+- 2h Spring Integration: channels, adapters, gateways, transformers, routers
+- 2h Spring AMQP (RabbitMQ): `RabbitTemplate`, `@RabbitListener`, dead-letter exchanges
+- 2h Spring Kafka: `KafkaTemplate`, `@KafkaListener`, error handling, retry topics
+- 1h EIP patterns no contexto prático
+- 1h projeto de integração
+
+**Projeto Prático Obrigatório:**
+Implemente **pipeline de processamento de pedidos** via Spring Integration:
+- Pedido chega via REST → publicado em canal `orders-channel`
+- Router por tipo de pedido (normal vs express)
+- Enriquecedor busca dados do cliente via chamada externa
+- Transformador prepara mensagem para publicação no Kafka
+- Error handler com retry + dead-letter para pedidos inválidos
+
+---
+
+#### SEMANA 25 — Revisão de Spring + Projeto Marco 2
+
+**Tema Central:** Consolidação de todo o ecossistema Spring em um projeto de referência.
+
+**8h/dia integralmente no Projeto Marco 2:**
+
+**🏆 PROJETO MARCO 2: API REST de E-commerce Completa**
+
+Construir uma API REST de e-commerce de produção com:
+- **Autenticação/Autorização:** JWT + OAuth2 (Google login)
+- **Domínio:** Produtos, Pedidos, Clientes, Pagamentos
+- **Banco:** PostgreSQL com Flyway, JPA Avançado (cache L2 com Redis)
+- **Testes:** Unit (JUnit5 + Mockito) + Integração (Testcontainers) + Contrato (Pact)
+- **Documentação:** OpenAPI 3.0 gerada automaticamente + exemplos
+- **Observabilidade:** Actuator + Micrometer + logs estruturados com correlation ID
+- **CI local:** Maven/Gradle com quality gates
+- **Resiliência:** Resilience4j em chamadas externas
+- Cobertura ≥ 85%, 0 vulnerabilidades SonarQube, 0 bugs SpotBugs
+
+---
+
+### 🔷 FASE 5 — QUARKUS (Semanas 26–29)
+
+---
+
+#### SEMANA 26 — Fundamentos Quarkus + CDI + Dev Services
+
+**Tema Central:** Entender Quarkus como alternativa para workloads cloud-native com startup ultra-rápido.
+
+**Distribuição das 8h diárias:**
+- 2h teoria: arquitetura Quarkus (build-time augmentation vs Spring runtime)
+- 2h CDI (Contexts and Dependency Injection): scopes, qualifiers, producers, interceptors
+- 2h Dev Services: banco de dados, Kafka, Redis — provisionamento automático em testes
+- 1h comparativo aprofundado com Spring Boot (startup, memory footprint, developer experience)
+- 1h RESTEasy Reactive vs JAX-RS tradicional
+
+**Projeto Prático:** CRUD completo com Quarkus + Hibernate ORM Panache + Dev Services (PostgreSQL automático).
+
+---
+
+#### SEMANA 27 — GraalVM Native Image + MicroProfile
+
+**Tema Central:** Build nativo para ambientes serverless e microsserviços de alta densidade.
+
+**Distribuição das 8h diárias:**
+- 2h GraalVM: como native-image funciona, closed-world assumption, limitações (reflection, dynamic proxies)
+- 2h configuração de reflection hints para native build
+- 2h MicroProfile: Config, Health, Metrics, OpenAPI, Fault Tolerance
+- 2h build nativo de projeto real com análise de problemas
+
+**Projeto Prático:** API da semana anterior compilada como native image. Benchmark: startup time, memory usage, request latency (JVM vs Native).
+
+**Armadilhas Comuns:**
+- Reflection sem `@RegisterForReflection` quebra o build nativo
+- Libraries que usam `ClassLoader.loadClass()` dinâmico quebram no native
+- Jackson sem módulo de native support causa erros em produção
+
+---
+
+#### SEMANA 28 — Quarkus + Kafka + Redis + Deploy Kubernetes
+
+**Tema Central:** Quarkus em ambiente de produção com mensageria e estado externo.
+
+**Distribuição das 8h diárias:**
+- 2h SmallRye Reactive Messaging com Kafka
+- 2h Quarkus Cache + Redis
+- 2h Dockerfile otimizado + Kubernetes manifests
+- 2h projeto prático completo
+
+**Projeto Prático:** Serviço de processamento de eventos com Quarkus + Kafka + Redis. Deploy no K8s local (minikube/kind) com liveness/readiness probes do MicroProfile Health.
+
+---
+
+#### SEMANA 29 — Revisão Quarkus + Comparativo Arquitetural
+
+**Tema Central:** Consolidar Quarkus e saber quando escolhê-lo vs Spring Boot.
+
+**Distribuição das 8h diárias:**
+- 4h refatoração e documentação do projeto Quarkus
+- 2h matrix de decisão: Spring Boot vs Quarkus vs Micronaut (write-up técnico)
+- 2h extensão customizada Quarkus básica
+
+---
+
+### 🔷 FASE 6 — MENSAGERIA E SISTEMAS DISTRIBUÍDOS (Semanas 30–34)
+
+---
+
+#### SEMANA 30 — Apache Kafka: Fundamentos Profundos
+
+**Tema Central:** Kafka como espinha dorsal de sistemas event-driven de grande escala.
+
+**Distribuição das 8h diárias:**
+- 2h teoria: Partitions, Replication factor, ISR, leader election, Offsets, Consumer Groups
+- 2h laboratório: criar cluster local com 3 brokers, testar failover
+- 2h projeto prático com Producers e Consumers customizados
+- 1h Idempotent Producer + Exactly-once semantics (transações Kafka)
+- 1h análise de `__consumer_offsets` topic
+
+**Projeto Prático:** Sistema de tracking de pedidos com Kafka. Producer publica eventos de ciclo de vida. 3 Consumer Groups distintos processam para diferentes fins (notificação, analytics, auditoria).
+
+**Armadilhas Comuns:**
+- Partitions insuficientes para o throughput esperado (reparticionamento pós-produção é custoso)
+- Consumer sem commit de offset (reprocessa infinitamente após restart)
+- Retention policy sem considerar espaço em disco
+
+---
+
+#### SEMANA 31 — Kafka Streams + Kafka Connect + Schema Registry
+
+**Tema Central:** Kafka como plataforma de stream processing, não apenas pub/sub.
+
+**Distribuição das 8h diárias:**
+- 2h Kafka Streams: KStream, KTable, joins, windowing, stateful operations
+- 2h Schema Registry com Avro: schema evolution, compatibility modes
+- 2h Kafka Connect: source connectors (DB → Kafka), sink connectors (Kafka → DB), Debezium CDC
+- 2h projeto prático
+
+**Projeto Prático:** Pipeline CDC com Debezium: mudanças no PostgreSQL capturadas pelo Debezium → Kafka → Kafka Streams para agregações → sink para Redis.
+
+---
+
+#### SEMANA 32 — RabbitMQ Avançado
+
+**Tema Central:** RabbitMQ para workloads orientadas a tasks com routing sofisticado.
+
+**Distribuição das 8h diárias:**
+- 2h teoria: AMQP protocol, Exchange types (Direct, Topic, Fanout, Headers), bindings
+- 2h laboratório: DLQ (Dead Letter Queue), TTL, priority queues, quorum queues
+- 2h projeto prático
+- 1h RabbitMQ com Spring AMQP: `RabbitTemplate`, `SimpleMessageListenerContainer`
+- 1h comparativo Kafka vs RabbitMQ: use cases, retention, ordering, throughput
+
+**Projeto Prático:** Sistema de processamento de documentos com RabbitMQ:
+- Exchange Topic com routing por tipo de documento
+- DLQ para documentos que falham após N tentativas
+- Priority queue para documentos urgentes
+- Monitoring via RabbitMQ Management + Spring Boot Actuator
+
+---
+
+#### SEMANA 33 — Padrões de Mensageria: Saga, Outbox, Event Sourcing
+
+**Tema Central:** Padrões arquiteturais que resolvem transações distribuídas sem 2PC.
+
+**Distribuição das 8h diárias:**
+- 2h teoria: Saga (Choreography vs Orchestration), Outbox Pattern, Event Sourcing, CQRS
+- 2h análise de implementações reais: Eventuate Tram, Axon Framework
+- 3h implementação prática
+- 1h análise de trade-offs: quando cada padrão faz sentido
+
+**Projeto Prático:** Implemente **Saga Coreografada** para fluxo de pedido:
+- Serviço de Pedidos publica `OrderCreated`
+- Serviço de Estoque consome, reserva, publica `StockReserved` ou `StockFailed`
+- Serviço de Pagamento consome, processa, publica `PaymentConfirmed` ou `PaymentFailed`
+- Compensating transactions se qualquer etapa falhar
+- Outbox Pattern para garantir publicação atômica com DB commit
+
+**Armadilhas Comuns:**
+- Saga sem idempotência no consumer (processa o mesmo evento múltiplas vezes)
+- Outbox sem pooling otimizado (latência vs throughput)
+- Event Sourcing sem snapshot (replay de 10.000 eventos para reconstruir estado)
+
+---
+
+#### SEMANA 34 — Revisão de Mensageria + Projeto Marco 3 Parte I
+
+**Tema Central:** Aplicar todo o conhecimento de mensageria em sistema distribuído real.
+
+**🏆 PROJETO MARCO 3: Plataforma de Pedidos com Microsserviços + Kafka**
+
+Arquitetura: 4 microsserviços (Order, Inventory, Payment, Notification) comunicando via Kafka.
+- Saga Pattern com Outbox
+- Schema Registry com Avro
+- Circuit Breaker nos consumers
+- Deploy com Docker Compose
+- Testes de integração com Testcontainers (Kafka + PostgreSQL)
+
+---
+
+### 🔷 FASE 7 — PERSISTÊNCIA E BANCOS DE DADOS (Semanas 35–39)
+
+---
+
+#### SEMANA 35 — SQL Avançado + PostgreSQL Internals
+
+**Tema Central:** SQL como superpoder — queries eficientes que não destroem a performance em produção.
+
+**Distribuição das 8h diárias:**
+- 2h SQL avançado: window functions (`ROW_NUMBER`, `RANK`, `LAG/LEAD`, `PARTITION BY`), CTEs recursivas, lateral joins
+- 2h PostgreSQL internals: MVCC (Multi-Version Concurrency Control), WAL, checkpoint, VACUUM
+- 2h laboratório: `EXPLAIN ANALYZE` profundo, interpretação de planos de query, identificação de seq scans
+- 1h Índices: B-tree, Hash, GIN, GiST, partial indexes, covering indexes
+- 1h PgBouncer: pool modes (session vs transaction vs statement), configuração para workloads Java
+
+**Projeto Prático:** Conjunto de 20 queries progressivamente complexas para sistema de e-commerce, cada uma acompanhada de `EXPLAIN ANALYZE` antes e depois de otimização com índices.
+
+**Armadilhas Comuns:**
+- Índice em coluna com baixa seletividade (pior do que seq scan)
+- `SELECT *` em queries de produção (traz colunas não utilizadas, impede index-only scan)
+- Transações longas que bloqueiam VACUUM e causam table bloat
+
+---
+
+#### SEMANA 36 — Hibernate/JPA Avançado + Flyway/Liquibase
+
+**Tema Central:** ORM usado corretamente: performance previsível e schema gerenciado.
+
+**Distribuição das 8h diárias:**
+- 2h 1st/2nd level cache: `@Cache`, `CacheMode`, EhCache vs Redis como L2 cache
+- 2h fetch strategies: `@BatchSize`, `@Fetch(FetchMode.SUBSELECT)`, `EntityGraph` nomeado
+- 2h Flyway vs Liquibase: migração de schema em pipeline CI/CD, rollback strategies
+- 1h Criteria API para queries type-safe programáticas
+- 1h Native queries e `@SqlResultSetMapping`
+
+**Projeto Prático:** Otimizar projeto do Marco 2 identificando e eliminando todos os N+1 problems (usar `hibernate.generate_statistics` + `datasource-proxy` para contar queries).
+
+**Armadilhas Comuns:**
+- L2 cache com entidades que mudam frequentemente (stale data)
+- Flyway com migrações irreversíveis em produção sem backup
+- `@OneToMany(cascade = ALL)` acidental deletando dados em cascata
+
+---
+
+#### SEMANA 37 — Redis + MongoDB
+
+**Tema Central:** NoSQL estratégico — quando o modelo relacional não é a melhor escolha.
+
+**Distribuição das 8h diárias:**
+- 2h Redis: estruturas de dados (String, Hash, List, Set, Sorted Set, Stream), Lua scripting, pub/sub
+- 1h Redis patterns: Cache-Aside, Write-Through, Read-Through, TTL strategies
+- 1h Spring Data Redis: `RedisTemplate`, `@Cacheable` com Redis
+- 2h MongoDB: document model, aggregation pipeline, índices compostos, `$lookup`
+- 1h Spring Data MongoDB: repositories, aggregation com `MongoTemplate`
+- 1h Redis Cluster: sharding, replica, failover
+
+**Projeto Prático:** Adicionar Redis como:
+1. Cache L2 do Hibernate (configuração real)
+2. Session store para aplicação Spring Security
+3. Rate limiting distribuído com Lua script (window deslizante)
+4. Leaderboard com Sorted Set
+
+---
+
+#### SEMANA 38 — Elasticsearch + Transações Distribuídas
+
+**Tema Central:** Busca full-text de produção e o problema das transações que cruzam serviços.
+
+**Distribuição das 8h diárias:**
+- 2h Elasticsearch: índices, shards, mapping, analyzers, queries (match, term, bool, range, fuzzy)
+- 2h aggregations: metrics, bucket, pipeline aggregations para analytics
+- 1h Spring Data Elasticsearch: `ElasticsearchRestTemplate`, repositories
+- 2h Transações distribuídas: XA (porquê evitar), Saga, TCC (Try-Confirm-Cancel)
+- 1h análise de casos reais de falhas em transações distribuídas
+
+**Projeto Prático:** Sincronização PostgreSQL → Elasticsearch via Debezium CDC para busca full-text de produtos. Queries de busca com faceting, highlighting e paginação com `search_after`.
+
+---
+
+#### SEMANA 39 — Revisão de Persistência + Performance Tuning de Banco
+
+**Tema Central:** Consolidar persistência com foco em otimização de performance para produção.
+
+**Distribuição das 8h diárias:**
+- 2h connection pool tuning: HikariCP (`maximumPoolSize`, `minimumIdle`, `connectionTimeout`)
+- 2h análise de slow queries em cenário de load test
+- 2h refatoração do Marco 3 com otimizações de banco
+- 2h documentação das decisões de persistência com trade-offs
+
+**Armadilhas Comuns:**
+- `maximumPoolSize` muito alto (conexões PostgreSQL são caras — cada uma usa ~5MB)
+- Não usar `statement_timeout` no PostgreSQL (queries longas degradam todo o banco)
+- Elasticsearch sem refresh interval configurado (impacto em indexação)
+
+---
+
+### 🔷 FASE 8 — CLOUD, INFRAESTRUTURA E DEVOPS (Semanas 40–45)
+
+---
+
+#### SEMANA 40 — Docker Avançado para Java
+
+**Tema Central:** Containerizar aplicações Java eficientemente — imagens pequenas, seguras e rápidas.
+
+**Distribuição das 8h diárias:**
+- 2h Dockerfile multi-stage build: compile → test → runtime (distroless/jre-slim)
+- 1h JVM flags para containers: `-XX:+UseContainerSupport`, `MaxRAMPercentage`
+- 2h laboratório: comparar tamanhos e startup times (JVM, distroless, native)
+- 2h Docker Compose para ambiente de desenvolvimento local completo
+- 1h Container security: non-root user, read-only filesystem, seccomp profiles
+
+**Projeto Prático:** Dockerfile de produção para o Marco 3 com:
+- Multi-stage build (imagem final < 150MB)
+- JVM flags corretas para container
+- Health check via endpoint Actuator
+- Non-root user, labels de metadados
+
+---
+
+#### SEMANA 41 — Kubernetes para Java Developers
+
+**Tema Central:** K8s do ponto de vista do desenvolvedor Java — deploy, escalonamento e operação.
+
+**Distribuição das 8h diárias:**
+- 2h teoria K8s: Pods, Deployments, Services, ConfigMaps, Secrets, Namespaces
+- 2h laboratório: deploy do Marco 3 em minikube/kind
+- 2h HPA (Horizontal Pod Autoscaler) + VPA, liveness/readiness/startup probes
+- 1h Helm: criar chart para aplicação Spring Boot
+- 1h ConfigMaps e Secrets com Spring Cloud Kubernetes
+
+**Projeto Prático:** Deploy completo do Marco 3 em K8s:
+- `ConfigMap` para configurações de aplicação
+- `Secret` para credenciais (encriptados)
+- HPA baseado em CPU e custom metrics (requests/segundo via Prometheus)
+- Probes configuradas corretamente (readiness falha durante migração Flyway)
+- `PodDisruptionBudget` para zero-downtime deployments
+
+**Armadilhas Comuns:**
+- Liveness probe muito agressiva mata pod durante GC pause
+- Secrets em `ENV` variáveis visíveis em `kubectl describe pod`
+- Sem `resources.limits` = um pod consome todo o nó
+
+---
+
+#### SEMANA 42 — AWS para Java Developers
+
+**Tema Central:** Serviços AWS mais utilizados em stacks Java enterprise.
+
+**Distribuição das 8h diárias:**
+- 2h AWS SDK v2: `S3Client`, `SqsClient`, `DynamoDbClient` — configuração, retry, timeout
+- 2h ECS Fargate: task definitions, service auto-scaling, load balancer integration
+- 1h Lambda Java: cold start problem (SnapStart, GraalVM native, tiered compilation)
+- 1h RDS + ElastiCache: connection pooling em ambiente serverless
+- 1h MSK (Kafka gerenciado) + SQS/SNS: quando usar cada um
+- 1h AWS Secrets Manager + Parameter Store para gestão de secrets
+
+**Projeto Prático:** Migrar o ambiente local do Marco 3 para AWS:
+- ECS Fargate com auto-scaling
+- RDS PostgreSQL Multi-AZ
+- ElastiCache Redis para cache
+- SQS como dead-letter queue alternativo
+- Secrets Manager para credenciais
+
+---
+
+#### SEMANA 43 — CI/CD Completo com GitHub Actions
+
+**Tema Central:** Pipeline de delivery que vai do commit ao deploy com segurança e velocidade.
+
+**Distribuição das 8h diárias:**
+- 2h GitHub Actions: workflow syntax, jobs, steps, reusable workflows, matrix builds
+- 2h Pipeline completo: build → unit tests → integration tests → static analysis → docker build → push → deploy
+- 1h Secrets management no CI: GitHub Secrets, OIDC com AWS
+- 1h Deploy strategies: rolling update, blue-green, canary
+- 2h implementação do pipeline para o Marco 3
+
+**Pipeline Obrigatório para o Projeto:**
+```yaml
+# Fases:
+1. Compile + Unit Tests (rápido, < 2 min)
+2. Integration Tests com Testcontainers
+3. SonarQube Analysis (Quality Gate bloqueante)
+4. Docker Build + Trivy Security Scan
+5. Push to ECR
+6. Deploy to ECS (Rolling Update)
+7. Smoke Tests pós-deploy
+8. Rollback automático se smoke tests falham
+```
+
+---
+
+#### SEMANA 44 — Terraform + Infraestrutura como Código
+
+**Tema Central:** Infraestrutura reproduzível, versionada e auditável.
+
+**Distribuição das 8h diárias:**
+- 2h Terraform: providers, resources, variables, outputs, state, modules
+- 2h laboratório: provisionar VPC, ECS Cluster, RDS, ElastiCache com Terraform
+- 2h módulos reutilizáveis para padrões Java (ECS service + ALB + RDS)
+- 2h integração Terraform no pipeline CI/CD (plan em PR, apply em merge)
+
+**Projeto Prático:** Toda a infraestrutura AWS do Marco 3 gerenciada por Terraform com:
+- Remote state no S3 + DynamoDB locking
+- Workspace para dev/staging/prod
+- Módulos para padrões repetidos
+
+---
+
+#### SEMANA 45 — Observabilidade Completa
+
+**Tema Central:** Ver o sistema por dentro em produção — métricas, logs, traces como trindade da observabilidade.
+
+**Distribuição das 8h diárias:**
+- 2h Micrometer + Prometheus: métricas de negócio e técnicas, `@Timed`, `Gauge`, `Counter`
+- 2h Grafana dashboards: JVM dashboard (JFR metrics), business metrics
+- 2h OpenTelemetry: distributed tracing, baggage propagation, Jaeger/Zipkin
+- 1h ELK Stack: structured logging com Logback JSON + Kibana dashboards
+- 1h Alertas: Prometheus Alertmanager, PagerDuty-like escalation
+
+**Projeto Prático:** Observabilidade completa no Marco 3:
+- Dashboard Grafana com: JVM health, request rate/errors/duration (RED metrics), business KPIs
+- Trace distribuído visível no Jaeger para fluxo completo de pedido
+- Alert: "Erro rate > 1% por 2 minutos" com notificação Slack
+- Log estruturado com `traceId` + `spanId` para correlação
+
+---
+
+### 🔷 FASE 9 — ARQUITETURA E MENTALIDADE SÊNIOR (Semanas 46–52)
+
+---
+
+#### SEMANA 46 — Design Patterns GoF Completo
+
+**Tema Central:** Padrões como vocabulário compartilhado e soluções testadas pelo tempo.
+
+**Distribuição das 8h diárias:**
+- 2h criacionais: Factory Method, Abstract Factory, Builder (fluent API), Prototype, Singleton (thread-safe)
+- 2h estruturais: Adapter, Bridge, Composite, Decorator, Facade, Flyweight, Proxy (dynamic via Reflection)
+- 2h comportamentais: Strategy, Observer, Command, Chain of Responsibility, Template Method, State, Visitor
+- 2h refatoração: código legado → código com padrões corretos
+
+**Projeto Prático:** Refatorar o Marco 2 aplicando:
+- Builder para construtores com > 4 parâmetros
+- Strategy para regras de precificação
+- Observer para eventos de domínio
+- Proxy dinâmico para logging AOP
+- Chain of Responsibility para validações de pedido
+
+---
+
+#### SEMANA 47 — Clean Architecture + Hexagonal + DDD
+
+**Tema Central:** Arquitetura que resiste ao tempo e às mudanças de frameworks.
+
+**Distribuição das 8h diárias:**
+- 2h teoria: Clean Architecture (camadas, regra de dependência), Hexagonal (ports & adapters)
+- 2h DDD: Aggregates, Entities, Value Objects, Domain Services, Repositories, Domain Events
+- 2h Bounded Contexts: como dividir o domínio, Context Map patterns
+- 2h refatoração: aplicar Hexagonal ao projeto existente
+
+**Projeto Prático:** Reimplementar módulo de pedidos do Marco 3 com:
+- Arquitetura Hexagonal: `domain/`, `application/`, `infrastructure/`, `interfaces/`
+- Zero dependência de Spring no domain layer
+- `UseCase` interfaces como portas primárias
+- `OrderRepository` como porta secundária — implementado por adaptador JPA
+- Domain Events desacoplados de infraestrutura
+
+---
+
+#### SEMANA 48 — CQRS + Event Sourcing + Resiliência
+
+**Tema Central:** Padrões avançados para sistemas de alta escala que precisam de auditoria completa e alta disponibilidade.
+
+**Distribuição das 8h diárias:**
+- 2h CQRS: separação de command e query, eventual consistency
+- 2h Event Sourcing: event store, replay, snapshots, versioning de eventos
+- 2h Resilience4j completo: composição de resilience patterns
+- 2h análise de casos reais: Netflix, Amazon — como usam esses padrões
+
+**Projeto Prático:** Implementar CQRS + Event Sourcing para o módulo de conta de usuário:
+- Command side: `CreateAccountCommand` → evento persistido em event store
+- Query side: projeção materializada em tabela otimizada para leitura
+- Replay de eventos para reconstruir estado ou criar nova projeção
+- Snapshot a cada 100 eventos
+
+---
+
+#### SEMANA 49 — gRPC + API Design Avançado + System Design
+
+**Tema Central:** Comunicação eficiente entre serviços e habilidade de desenhar sistemas do zero.
+
+**Distribuição das 8h diárias:**
+- 2h gRPC: Protobuf, serviços unary/server-streaming/client-streaming/bidirectional, interceptors
+- 1h REST nível 3 (HATEOAS), versionamento de API, OpenAPI 3.0
+- 2h System Design: praticar design de sistemas escaláveis (Twitter feed, Uber, Netflix)
+- 2h implementação gRPC com Spring Boot
+- 1h análise de casos: como grandes empresas expõem APIs
+
+**Projeto Prático:** Substituir comunicação REST interna entre microsserviços do Marco 3 por gRPC com:
+- `proto` files versionados
+- Interceptor para autenticação e tracing
+- Server streaming para notificações em tempo real
+- Load balancing client-side com `grpc-loadbalancing`
+
+---
+
+#### SEMANA 50 — Performance Engineering + Security Avançado
+
+**Tema Central:** Identificar e resolver problemas de performance e segurança que só aparecem em produção.
+
+**Distribuição das 8h diárias:**
+- 2h profiling: JFR + JMC, heap dump analysis com MAT, thread dump analysis
+- 1h identificar: memory leak, thread leak, connection leak
+- 2h OWASP Top 10: análise de cada vulnerabilidade com código de exemplo vulnerável e corrigido
+- 1h Vault/AWS Secrets Manager: secrets rotation, dynamic credentials
+- 2h laboratório: criar memory leak proposital, diagnosticar e resolver
+
+**Projeto Prático:** Audit de segurança completo do Marco 3 com OWASP ZAP + correção de todas as vulnerabilidades encontradas.
+
+---
+
+#### SEMANA 51 — Code Review + Liderança Técnica + Entrevistas
+
+**Tema Central:** Habilidades não-técnicas que separam o sênior do pleno.
+
+**Distribuição das 8h diárias:**
+- 2h code review: como dar feedback construtivo, checklist de qualidade (segurança, performance, design, testes)
+- 2h práticas de System Design Interview (mock interviews)
+- 2h apresentação técnica: preparar tech talk sobre arquitetura do projeto final
+- 2h contribuição open-source: abrir PR em projeto real (Spring Boot, Quarkus, qualquer biblioteca usada)
+
+**Atividades Práticas:**
+- Fazer code review de 5 PRs de projetos open-source reais com comentários detalhados
+- Gravar vídeo de 20 minutos explicando a arquitetura do Marco 3 (rubber duck + portfólio)
+- Simular System Design Interview: "Projete um sistema de pagamentos como PicPay" (45 min)
+
+---
+
+#### SEMANA 52 — Projeto Final + Consolidação
+
+**🏆 PROJETO MARCO FINAL: Plataforma FinTech de Grande Escala**
+
+Durante 5 dias, construir e documentar:
+
+**Arquitetura:**
+- 6 microsserviços: Account, Transaction, Notification, Fraud Detection, Reporting, API Gateway
+- Comunicação: REST (externo) + gRPC (interno) + Kafka (eventos)
+- Persistência: PostgreSQL (transacional) + MongoDB (documentos) + Redis (cache/rate limiting) + Elasticsearch (busca)
+- Infraestrutura: ECS Fargate + RDS + ElastiCache + MSK + CloudWatch
+- Padrões: DDD + Hexagonal + CQRS + Event Sourcing + Saga + Outbox
+
+**Requisitos Técnicos:**
+- Full test coverage (unit + integration + contract + E2E)
+- CI/CD completo com GitHub Actions
+- Observabilidade: Prometheus + Grafana + Jaeger + ELK
+- Segurança: OAuth2/OIDC + secrets rotation + OWASP compliance
+- Terraform para toda a infraestrutura
+- ADRs (Architecture Decision Records) para cada decisão arquitetural significativa
+- README.md de qualidade de projeto open-source
+
+---
+
+---
+
+## PARTE 3 — PROJETOS MARCOS (MILESTONES)
+
+| Marco | Semana | Projeto | Habilidades Validadas |
+|-------|--------|---------|----------------------|
+| 1 | 6 | Sistema Biblioteca Digital | OOP, Generics, Concorrência, JVM |
+| 2 | 25 | E-commerce API Spring Boot | Spring completo, Testes, Segurança, Qualidade |
+| 3 | 34–39 | Plataforma de Pedidos Microsserviços | Kafka, Saga, Docker, K8s, Persistência |
+| 4 | 45 | Marco 3 + AWS + CI/CD + Observabilidade | Cloud, DevOps, SRE mindset |
+| Final | 52 | Plataforma FinTech | Tudo + DDD + CQRS + Event Sourcing + System Design |
+
+---
+
+---
+
+## PARTE 4 — ESTRATÉGIAS DOS 9 PILARES DO ULTRALEARNING
+
+### 1. Meta-aprendizagem 🗺️
+**Como aplicar:** Antes de cada fase, dedique 2h para mapear:
+- O que você precisa aprender nesta fase
+- Quais recursos existem (livro, doc, código-fonte)
+- Quais são as conexões com fases anteriores
+- Qual é o projeto que provará que você aprendeu
+
+**Prático:** Criar um arquivo `LEARNING_MAP.md` no início de cada fase com este mapeamento. Revisar ao fim da fase.
+
+---
+
+### 2. Foco 🎯
+**Como aplicar:** Deep Work estruturado em blocos de 90 minutos (não Pomodoro clássico — trabalho técnico profundo requer mais de 25 minutos para entrar em flow).
+
+**Protocolo diário:**
+- 8h divididas em: 2 blocos de 90min (teoria/código) + 1h almoço + 2 blocos de 90min (projeto) + 1h revisão
+- Ambiente: notificações desligadas, fone com ruído branco, IDE em tela cheia
+- Regra: qualquer dúvida no bloco → anota, não interrompe o flow
+
+---
+
+### 3. Prática Direta ⚡
+**Como aplicar:** Regra absoluta — **zero teoria sem código em paralelo**.
+
+**Protocolo:**
+- Leu um conceito? Implemente em 15 minutos ou menos
+- Nunca avance capítulo sem o código do capítulo anterior compilando e testado
+- Cada conceito vira pelo menos um teste de unidade que o valida
+
+---
+
+### 4. Drill (Repetição Focada) 🔁
+**Como aplicar:** Identificar os pontos mais fracos de cada fase e atacá-los isoladamente.
+
+**Prático:**
+- Anki deck por fase com cards técnicos (não conceituais — cards de "complete o código")
+- Exercism.org: 5 exercícios por semana na trilha Java
+- LeetCode: 3x por semana para manter pensamento algorítmico
+
+---
+
+### 5. Recall 🧠
+**Como aplicar:** Testar o próprio conhecimento sem olhar material.
+
+**Prático:**
+- Ao fim de cada semana: fechar todos os materiais e escrever o que aprendeu (free writing, 30 min)
+- Code-from-memory: reimplementar um padrão/algoritmo sem consultar código anterior
+- Flashcards de APIs Java críticas (anotações Spring, métodos de Streams, flags JVM)
+
+---
+
+### 6. Feedback 📊
+**Como aplicar:** Usar múltiplas fontes de feedback imediato.
+
+**Fontes:**
+- **Compilador:** não ignore warnings — trate como erros
+- **Testes:** se falham, o entendimento estava errado
+- **SonarQube/SpotBugs:** feedback de qualidade de código
+- **Code review com IA:** usar Claude/GPT para revisar código com prompt específico: "Você é um sênior Java engineer. Revise este código identificando: performance issues, design problems, security vulnerabilities, missing test cases"
+- **Comunidade:** postar dúvidas no Stack Overflow, r/javahelp, Discord Java Brasil
+
+---
+
+### 7. Retenção 📖
+**Como aplicar:** A informação fica apenas quando é ensinada.
+
+**Protocolo:**
+- Ao fim de cada fase: escrever um blog post técnico (pode ser privado inicialmente)
+- README.md de cada projeto com explicações de todas as decisões arquiteturais
+- Tech talks pessoais: gravar vídeo de 10 min explicando o que aprendeu na semana
+
+---
+
+### 8. Intuição 💡
+**Como aplicar:** Ler código-fonte dos frameworks para entender "o porquê" antes do "como".
+
+**Protocolo:**
+- Antes de usar qualquer anotação Spring, ler o código dela no GitHub
+- Quando algo "não funciona como esperado", ler o código-fonte antes de buscar solução no Stack Overflow
+- Issues do GitHub do Spring Boot / Quarkus são leitura obrigatória — mostram problemas reais de produção
+
+---
+
+### 9. Experimentação 🧪
+**Como aplicar:** Comparar abordagens, medir, decidir baseado em dados.
+
+**Protocolo:**
+- Toda afirmação de performance deve ter benchmark JMH que a prove
+- Antes de adotar uma solução, implementar 2 abordagens e comparar
+- "Qual é o custo real de usar `synchronized` vs `ReentrantLock`?" — meça, não suponha
+
+---
+
+---
+
+## PARTE 5 — RECURSOS ESSENCIAIS CURADOS
+
+### 📚 Livros por Fase
+
+| Fase | Livro | Autor | Por que ler |
+|------|-------|-------|-------------|
+| 1–2 | **Effective Java (3ª ed.)** | Joshua Bloch | O manual de boas práticas mais importante para Java |
+| 2 | **Java Concurrency in Practice** | Brian Goetz | Concorrência explicada pelos próprios criadores da JVM |
+| 2 | **Java Performance** | Scott Oaks | Profiling, GC tuning, benchmarking |
+| 3 | **Growing Object-Oriented Software, Guided by Tests** | Freeman, Pryce | TDD de verdade, não apenas "escrever testes" |
+| 4 | **Spring in Action (6ª ed.)** | Craig Walls | Spring moderno com exemplos práticos |
+| 6–8 | **Designing Data-Intensive Applications** | Martin Kleppmann | A bíblia de sistemas distribuídos — leitura obrigatória |
+| 9 | **Clean Architecture** | Robert C. Martin | Arquitetura independente de framework |
+| 9 | **Domain-Driven Design** | Eric Evans | O livro original do DDD — denso mas indispensável |
+| 9 | **Implementing Domain-Driven Design** | Vaughn Vernon | DDD prático com exemplos de código |
+| 9 | **Building Microservices (2ª ed.)** | Sam Newman | Microsserviços do ponto de vista prático |
+
+---
+
+### 🌐 Documentações Oficiais Essenciais
+
+- **Oracle Java:** https://docs.oracle.com/en/java/javase/21/
+- **JEPs (Java Enhancement Proposals):** https://openjdk.org/jeps
+- **Spring Framework:** https://docs.spring.io/spring-framework/reference/
+- **Spring Boot:** https://docs.spring.io/spring-boot/docs/current/reference/html/
+- **Quarkus Guides:** https://quarkus.io/guides/
+- **Apache Kafka:** https://kafka.apache.org/documentation/
+- **Project Reactor:** https://projectreactor.io/docs/core/release/reference/
+- **Resilience4j:** https://resilience4j.readme.io/
+- **Micrometer:** https://micrometer.io/docs
+- **OpenTelemetry Java:** https://opentelemetry.io/docs/instrumentation/java/
+
+---
+
+### 💻 Repositórios Open-Source para Estudar
+
+| Repositório | Por que estudar |
+|-------------|-----------------|
+| `spring-projects/spring-boot` | Como o maior framework Java é estruturado |
+| `spring-projects/spring-framework` | IoC container, AOP, MVC internals |
+| `quarkusio/quarkus` | Build-time augmentation, extensões |
+| `spring-petclinic/spring-petclinic` | Aplicação Spring Boot de referência |
+| `eventuate-tram/eventuate-tram-sagas` | Saga Pattern com Kafka |
+| `thombergs/buckpal` | Hexagonal Architecture com Spring Boot |
+| `Netflix/Hystrix` (leia, não use) | Circuit Breaker design original |
+| `resilience4j/resilience4j` | Resiliência moderna |
+| `confluentinc/kafka-streams-examples` | Kafka Streams em produção |
+
+---
+
+### 🎯 Plataformas de Prática
+
+| Plataforma | Para quê |
+|------------|---------|
+| **Exercism.org** (trilha Java) | Estilo, idioms, code review por mentores |
+| **LeetCode** (medium/hard) | Algoritmos e estruturas de dados |
+| **HackerRank** (Java) | APIs Java, cobertura de edge cases |
+| **Codewars** | Kata focados em expressividade |
+| **Katacoda/KillerCoda** | Labs interativos de Kubernetes e Docker |
+| **AWS Skill Builder** | Labs práticos AWS |
+
+---
+
+### 📺 Conteúdo Técnico de Qualidade
+
+| Recurso | Tipo |
+|---------|------|
+| Venkat Subramaniam (youtube/devoxx) | Java moderno, functional, performance |
+| Spring I/O Talks (youtube) | Spring avançado, arquitetura |
+| Devoxx / JavaOne talks | Talks de engenheiros da Oracle e JVM |
+| InfoQ Java | Artigos técnicos de nível alto |
+| Thorben Janssen (thoughts-on-java.org) | Hibernate/JPA avançado |
+| Baeldung (baeldung.com) | Referência rápida — cuidado, nem sempre mostra o porquê |
+| ByteByteGo (youtube) | System Design acessível e visual |
+| Jordan has no life (youtube) | System Design avançado |
+
+---
+
+---
+
+## PARTE 6 — INDICADORES DE NÍVEL SÊNIOR (Definition of Done)
+
+### ✅ JVM & Performance
+- [ ] Explica G1GC, ZGC e Shenandoah sem consultar material — quando usar cada um
+- [ ] Dado um GC log, identifica o problema (frequência de GC, pause time, heap sizing) em < 10 minutos
+- [ ] Faz profiling de aplicação com JFR/JMC e identifica hotspot de CPU e memory leak
+- [ ] Explica happens-before, visibility e atomicidade com exemplos de código concretos
+
+### ✅ Código e Design
+- [ ] Faz code review de PR apontando: N+1 problems, race conditions, SOLID violations, security issues
+- [ ] Implementa qualquer GoF pattern do zero, justificando quando usar e quando não usar
+- [ ] Refatora código procedural para Hexagonal Architecture mantendo testes verdes
+- [ ] Escreve testes que documentam comportamento esperado, não implementação
+
+### ✅ Arquitetura e Sistemas Distribuídos
+- [ ] Dado um requisito de negócio, propõe arquitetura justificando escolha de banco, mensageria, padrões de resiliência
+- [ ] Explica trade-offs entre consistência eventual e forte em sistemas distribuídos com exemplos concretos
+- [ ] Descreve como implementar Saga Pattern evitando double-spend em sistema de pagamentos
+- [ ] System Design em 45 min: propõe arquitetura de sistema com 1M usuários com componentes Java justificados
+
+### ✅ Produção e Operação
+- [ ] Diagnostica memory leak em heap dump usando Eclipse MAT sem ajuda externa
+- [ ] Diagnostica deadlock em thread dump identificando os threads envolvidos e o recurso compartilhado
+- [ ] Configura pipeline CI/CD do zero com quality gates, security scanning e deploy automatizado
+- [ ] Configura alertas significativos (não noisy) com SLA baseado em percentis (P99, P999)
+
+### ✅ Segurança
+- [ ] Revisa código identificando as top 5 vulnerabilidades OWASP mais comuns para Java
+- [ ] Configura Spring Security com OAuth2/OIDC sem copiar de tutorial — entendendo cada linha
+- [ ] Implementa secrets rotation sem downtime da aplicação
+
+### ✅ Portfólio
+- [ ] Projeto Marco Final público no GitHub com README de qualidade profissional
+- [ ] ADRs documentando decisões arquiteturais com trade-offs
+- [ ] Pelo menos 1 contribuição merged em projeto open-source relevante
+- [ ] Tech talk gravado ou artigo publicado sobre tema técnico avançado
+
+---
+
+---
+
+## APÊNDICE — CHECKLIST ANTIPATTERNS POR FASE
+
+### Fase 1–2 (Java Core)
+- [ ] Não usar `==` para comparar Strings
+- [ ] Não ignorar exceções capturadas (catch vazio ou só com `e.printStackTrace()`)
+- [ ] Não fazer cast sem `instanceof`
+- [ ] Não criar ThreadLocal sem remover em `finally`
+- [ ] Não usar `Date`/`Calendar` — usar `java.time`
+
+### Fase 3 (Testes)
+- [ ] Não nomear testes como `test1()`, `testMethod()`
+- [ ] Não usar `Thread.sleep()` em testes — usar `Awaitility`
+- [ ] Não compartilhar estado entre testes
+- [ ] Não mockar o que você está testando
+
+### Fase 4 (Spring)
+- [ ] Não usar `@Autowired` em campo
+- [ ] Não colocar lógica de negócio em `@Controller`
+- [ ] Não expor entidades JPA diretamente na API
+- [ ] Não fazer rollback manual quando `@Transactional` faz automaticamente
+- [ ] Não usar `Optional.get()` sem `isPresent()` ou `orElseThrow()`
+
+### Fase 6 (Mensageria)
+- [ ] Não consumir mensagem sem idempotência
+- [ ] Não fazer commit de offset antes de processar
+- [ ] Não ter Consumer sem DLQ configurada
+- [ ] Não publicar no Kafka dentro de transação de banco sem Outbox Pattern
+
+### Fase 7 (Persistência)
+- [ ] Não carregar todo o dataset em memória para filtrar em Java
+- [ ] Não usar `@OneToMany` sem `fetch = LAZY` explícito
+- [ ] Não fazer `session.flush()` desnecessário
+- [ ] Não usar conexão sem pool em produção
+
+### Fase 8 (Cloud/DevOps)
+- [ ] Não hardcodar credenciais em código ou Docker image
+- [ ] Não usar `latest` como tag de imagem Docker
+- [ ] Não expor Actuator sem autenticação
+- [ ] Não fazer deploy sem health check configurado
+
+---
+
+*Plano gerado com base nos 9 pilares do Ultralearning de Scott Young. Revisão recomendada a cada 4 semanas para ajustar velocidade e profundidade conforme progresso real.*
